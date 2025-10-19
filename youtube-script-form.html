@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Script Writing Form</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .form-content {
+            padding: 40px 30px;
+        }
+
+        .section {
+            margin-bottom: 35px;
+        }
+
+        .section-title {
+            font-size: 1.5em;
+            color: #667eea;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+            font-size: 1em;
+        }
+
+        .required {
+            color: #e74c3c;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="url"],
+        input[type="date"],
+        input[type="number"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1em;
+            transition: all 0.3s;
+            font-family: inherit;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .radio-group,
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .radio-option,
+        .checkbox-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .radio-option:hover,
+        .checkbox-option:hover {
+            border-color: #667eea;
+            background: #f8f9ff;
+        }
+
+        .radio-option input[type="radio"],
+        .checkbox-option input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .package-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 15px;
+        }
+
+        .package-card {
+            border: 3px solid #e0e0e0;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .package-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .package-card input[type="radio"] {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 20px;
+            height: 20px;
+        }
+
+        .package-card.selected {
+            border-color: #667eea;
+            background: #f8f9ff;
+        }
+
+        .package-name {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .package-price {
+            font-size: 2em;
+            color: #667eea;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .package-features {
+            text-align: left;
+            margin-top: 15px;
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .package-features li {
+            margin-bottom: 8px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 30px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .help-text {
+            font-size: 0.85em;
+            color: #666;
+            margin-top: 5px;
+            font-style: italic;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+            
+            .form-content {
+                padding: 30px 20px;
+            }
+
+            .package-cards {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎬 YouTube Script Writing Form</h1>
+            <p>Let's create an amazing script for your channel!</p>
+        </div>
+
+        <form class="form-content" id="scriptForm">
+            <!-- Basic Information -->
+            <div class="section">
+                <h2 class="section-title">📋 Basic Information</h2>
+                
+                <div class="form-group">
+                    <label>Your Name <span class="required">*</span></label>
+                    <input type="text" name="clientName" required placeholder="Enter your full name">
+                </div>
+
+                <div class="form-group">
+                    <label>Email Address <span class="required">*</span></label>
+                    <input type="email" name="email" required placeholder="your.email@example.com">
+                </div>
+
+                <div class="form-group">
+                    <label>YouTube Channel Name <span class="required">*</span></label>
+                    <input type="text" name="channelName" required placeholder="Your channel name">
+                </div>
+
+                <div class="form-group">
+                    <label>Channel Link (Optional)</label>
+                    <input type="url" name="channelUrl" placeholder="https://youtube.com/@yourchannel">
+                    <div class="help-text">This helps us understand your content style</div>
+                </div>
+            </div>
+
+            <!-- Content Details -->
+            <div class="section">
+                <h2 class="section-title">📺 Content Details</h2>
+
+                <div class="form-group">
+                    <label>Video Topic/Title <span class="required">*</span></label>
+                    <input type="text" name="videoTopic" required placeholder="What is your video about?">
+                </div>
+
+                <div class="form-group">
+                    <label>Video Script Duration <span class="required">*</span></label>
+                    <select name="scriptDuration" required>
+                        <option value="">Select duration</option>
+                        <option value="1-3">1-3 minutes (Short form)</option>
+                        <option value="3-5">3-5 minutes</option>
+                        <option value="5-10">5-10 minutes</option>
+                        <option value="10-15">10-15 minutes</option>
+                        <option value="15-20">15-20 minutes</option>
+                        <option value="20+">20+ minutes (Long form)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Content Type <span class="required">*</span></label>
+                    <select name="contentType" required>
+                        <option value="">Select content type</option>
+                        <option value="educational">Educational/Tutorial</option>
+                        <option value="entertainment">Entertainment</option>
+                        <option value="review">Product Review</option>
+                        <option value="vlog">Vlog/Personal</option>
+                        <option value="documentary">Documentary Style</option>
+                        <option value="explainer">Explainer Video</option>
+                        <option value="storytelling">Storytelling</option>
+                        <option value="howto">How-To Guide</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Main Message/Key Points <span class="required">*</span></label>
+                    <textarea name="mainMessage" required placeholder="What are the main points you want to cover in this video?"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Target Audience Age Group <span class="required">*</span></label>
+                    <select name="ageGroup" required>
+                        <option value="">Select age group</option>
+                        <option value="kids">Kids (5-12 years)</option>
+                        <option value="teens">Teens (13-17 years)</option>
+                        <option value="young-adults">Young Adults (18-24 years)</option>
+                        <option value="adults">Adults (25-34 years)</option>
+                        <option value="mature-adults">Mature Adults (35-44 years)</option>
+                        <option value="middle-aged">Middle-Aged (45-54 years)</option>
+                        <option value="seniors">Seniors (55+ years)</option>
+                        <option value="all-ages">All Ages</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Primary Interests/Niche <span class="required">*</span></label>
+                    <select name="primaryInterest" required>
+                        <option value="">Select primary interest</option>
+                        <option value="technology">Technology & Gadgets</option>
+                        <option value="gaming">Gaming</option>
+                        <option value="education">Education & Learning</option>
+                        <option value="business">Business & Entrepreneurship</option>
+                        <option value="finance">Finance & Investing</option>
+                        <option value="health">Health & Fitness</option>
+                        <option value="beauty">Beauty & Fashion</option>
+                        <option value="cooking">Cooking & Food</option>
+                        <option value="travel">Travel & Adventure</option>
+                        <option value="lifestyle">Lifestyle & Vlogs</option>
+                        <option value="entertainment">Entertainment & Comedy</option>
+                        <option value="music">Music</option>
+                        <option value="sports">Sports</option>
+                        <option value="diy">DIY & Crafts</option>
+                        <option value="parenting">Parenting & Family</option>
+                        <option value="motivation">Motivation & Self-Help</option>
+                        <option value="science">Science & Nature</option>
+                        <option value="history">History & Culture</option>
+                        <option value="automotive">Cars & Automotive</option>
+                        <option value="pets">Pets & Animals</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Audience Location/Demographics</label>
+                    <select name="audienceLocation">
+                        <option value="">Select primary location (Optional)</option>
+                        <option value="global">Global/Worldwide</option>
+                        <option value="usa">United States</option>
+                        <option value="uk">United Kingdom</option>
+                        <option value="canada">Canada</option>
+                        <option value="australia">Australia</option>
+                        <option value="india">India</option>
+                        <option value="pakistan">Pakistan</option>
+                        <option value="middle-east">Middle East</option>
+                        <option value="europe">Europe</option>
+                        <option value="asia">Asia</option>
+                        <option value="africa">Africa</option>
+                        <option value="latin-america">Latin America</option>
+                    </select>
+                    <div class="help-text">This helps us use appropriate references and language style</div>
+                </div>
+
+                <div class="form-group">
+                    <label>Additional Audience Details (Optional)</label>
+                    <textarea name="additionalAudience" placeholder="Any other specific details about your audience? (e.g., 'College students interested in side hustles', 'Working professionals looking for productivity tips')"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Tone & Style <span class="required">*</span></label>
+                    <div class="radio-group">
+                        <label class="radio-option">
+                            <input type="radio" name="toneStyle" value="casual" required>
+                            <span><strong>Casual/Conversational</strong> - Friendly and relaxed</span>
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="toneStyle" value="professional" required>
+                            <span><strong>Professional</strong> - Formal and authoritative</span>
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="toneStyle" value="educational" required>
+                            <span><strong>Educational</strong> - Informative and clear</span>
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="toneStyle" value="entertaining" required>
+                            <span><strong>Entertaining</strong> - Fun and engaging</span>
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="toneStyle" value="inspirational" required>
+                            <span><strong>Inspirational</strong> - Motivational and uplifting</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Call-to-Action (CTA) Type <span class="required">*</span></label>
+                    <div class="checkbox-group">
+                        <label class="checkbox-option">
+                            <input type="checkbox" name="cta" value="subscribe">
+                            <span>Subscribe to channel</span>
+                        </label>
+                        <label class="checkbox-option">
+                            <input type="checkbox" name="cta" value="like">
+                            <span>Like the video</span>
+                        </label>
+                        <label class="checkbox-option">
+                            <input type="checkbox" name="cta" value="comment">
+                            <span>Comment/Engage</span>
+                        </label>
+                        <label class="checkbox-option">
+                            <input type="checkbox" name="cta" value="share">
+                            <span>Share with friends</span>
+                        </label>
+                        <label class="checkbox-option">
+                            <input type="checkbox" name="cta" value="website">
+                            <span>Visit website/link</span>
+                        </label>
+                        <label class="checkbox-option">
+                            <input type="checkbox" name="cta" value="product">
+                            <span>Buy product/service</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Additional Information -->
+            <div class="section">
+                <h2 class="section-title">💡 Additional Information</h2>
+
+                <div class="form-group">
+                    <label>Reference Videos/Competitors (Optional)</label>
+                    <textarea name="references" placeholder="Share links to videos that inspire you or competitors you admire"></textarea>
+                    <div class="help-text">This helps us understand the style you're looking for</div>
+                </div>
+
+                <div class="form-group">
+                    <label>Things to Avoid</label>
+                    <textarea name="thingsToAvoid" placeholder="Any specific topics, words, or approaches you want to avoid?"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Special Instructions</label>
+                    <textarea name="specialInstructions" placeholder="Any other requirements or special notes?"></textarea>
+                </div>
+            </div>
+
+            <!-- Package Selection -->
+            <div class="section">
+                <h2 class="section-title">💰 Select Your Package</h2>
+                
+                <div class="package-cards">
+                    <label class="package-card" onclick="selectPackage(this)">
+                        <input type="radio" name="package" value="basic" required>
+                        <div class="package-name">🌟 Basic</div>
+                        <div class="package-price">$25</div>
+                        <ul class="package-features">
+                            <li>✓ Up to 1500 words</li>
+                            <li>✓ Engaging hook & intro</li>
+                            <li>✓ Structured content</li>
+                            <li>✓ Strong CTA</li>
+                            <li>✓ 3 revisions</li>
+                            <li>✓ 3 days delivery</li>
+                        </ul>
+                    </label>
+
+                    <label class="package-card" onclick="selectPackage(this)">
+                        <input type="radio" name="package" value="standard" required>
+                        <div class="package-name">⭐ Standard</div>
+                        <div class="package-price">$50</div>
+                        <ul class="package-features">
+                            <li>✓ Up to 3000 words</li>
+                            <li>✓ Everything in Basic</li>
+                            <li>✓ Audience research</li>
+                            <li>✓ Timestamps</li>
+                            <li>✓ 3 revisions</li>
+                            <li>✓ 5 days delivery</li>
+                        </ul>
+                    </label>
+
+                    <label class="package-card" onclick="selectPackage(this)">
+                        <input type="radio" name="package" value="premium" required>
+                        <div class="package-name">💎 Premium</div>
+                        <div class="package-price">$75</div>
+                        <ul class="package-features">
+                            <li>✓ Up to 5000 words</li>
+                            <li>✓ Everything in Standard</li>
+                            <li>✓ Viral hook formulas</li>
+                            <li>✓ Title suggestions</li>
+                            <li>✓ 5 revisions</li>
+                            <li>✓ 7 days delivery</li>
+                        </ul>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Delivery Preferences -->
+            <div class="section">
+                <h2 class="section-title">⏰ Delivery Preferences</h2>
+
+                <div class="form-group">
+                    <label>Preferred Delivery Date</label>
+                    <input type="date" name="deliveryDate">
+                    <div class="help-text">Leave blank for standard delivery time based on package</div>
+                </div>
+
+                <div class="form-group">
+                    <label>Number of Revision Rounds Needed</label>
+                    <select name="revisions">
+                        <option value="package-default">As per package (Default)</option>
+                        <option value="1">1 revision</option>
+                        <option value="2">2 revisions</option>
+                        <option value="3">3 revisions</option>
+                        <option value="5">5 revisions</option>
+                        <option value="unlimited">Unlimited (Premium only)</option>
+                    </select>
+                </div>
+            </div>
+
+            <button type="submit" class="submit-btn">🚀 Submit Script Request</button>
+        </form>
+    </div>
+
+    <script>
+        function selectPackage(card) {
+            document.querySelectorAll('.package-card').forEach(c => {
+                c.classList.remove('selected');
+            });
+            card.classList.add('selected');
+        }
+
+        document.getElementById('scriptForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const data = {};
+            
+            for (let [key, value] of formData.entries()) {
+                if (data[key]) {
+                    if (Array.isArray(data[key])) {
+                        data[key].push(value);
+                    } else {
+                        data[key] = [data[key], value];
+                    }
+                } else {
+                    data[key] = value;
+                }
+            }
+            
+            console.log('Form Data:', data);
+            
+            alert('✅ Form submitted successfully!\n\nYour script request has been received. We will contact you shortly via email.\n\nThank you for choosing our service! 🎬');
+            
+            // You can add email sending logic here or redirect to payment
+            // window.location.href = 'payment-page.html';
+        });
+
+        // Auto-select package card when radio is clicked
+        document.querySelectorAll('.package-card input[type="radio"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                document.querySelectorAll('.package-card').forEach(card => {
+                    card.classList.remove('selected');
+                });
+                this.closest('.package-card').classList.add('selected');
+            });
+        });
+    </script>
+</body>
+</html>
